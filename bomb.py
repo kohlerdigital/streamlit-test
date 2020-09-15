@@ -35,23 +35,25 @@ if st.sidebar.checkbox('Show raw data'):
 #############################
 #sidebar
 
-inputselect = {
-    "theater": st.sidebar.multiselect(
-        'Select Theater of operation', data['theater'].unique()
-    ),
-    "Airforce": st.sidebar.multiselect(
-        'Select Airforce', data['country_flying_mission'].unique()
-    )
-}
 
-st.write(inputselect)
+Airforce = st.sidebar.multiselect('Airforce', data['country_flying_mission'].unique())
 
-#############################
-#mainframe
-st.write(data)
- 
+theater = st.sidebar.multiselect('theater', data['theater'].unique())
+
 
  ##########
 
+
+# Filter dataframe
+new_df = data[(data['country_flying_mission'].isin(Airforce)) & (data['theater'].isin(theater))]
+
+# write dataframe to screen
+st.write(new_df)
+
+
+new_df['latitude'] = data['latitude'].dropna().apply(np.int64)
+new_df['longitude'] = data['longitude'].dropna().apply(np.int64)
+
+new_df['latitude']
 
 st.map(data)
