@@ -23,7 +23,7 @@ def load_data(nrows):
 ############################
 
 # Create a text element and let the reader know the data is loading.
-data_load_state = st.text('Loading data...')
+data_load_state = st.text('Loading data... It might take 45 secondes')
 # Load 10,000 rows of data into the dataframe.
 data = load_data(1000)
 # Notify the reader that the data was successfully loaded.
@@ -41,11 +41,11 @@ Airforce = st.sidebar.multiselect('Airforce', data['country_flying_mission'].uni
 theater = st.sidebar.multiselect('theater', data['theater'].unique())
 
 
- ##########
-
+##########
 
 # Filter dataframe
 new_df = data[(data['country_flying_mission'].isin(Airforce)) & (data['theater'].isin(theater))]
+
 
 # write dataframe to screen
 st.write(new_df)
@@ -54,6 +54,9 @@ st.write(new_df)
 new_df['latitude'] = data['latitude'].dropna().apply(np.int64)
 new_df['longitude'] = data['longitude'].dropna().apply(np.int64)
 
-new_df['latitude']
+
+st.write("the latitude type is:")
+new_df['latitude'].dtype
+
 
 st.map(data)
