@@ -25,13 +25,15 @@ def load_data(nrows):
 # Create a text element and let the reader know the data is loading.
 data_load_state = st.text('Loading data... It might take 45 secondes')
 # Load 10,000 rows of data into the dataframe.
-data = load_data(1000)
+raw_data = load_data(1000)
 # Notify the reader that the data was successfully loaded.
-data_load_state.text("Done! (using st.cache)")
+data_load_state.text("Data fully loaded! (using st.cache)")
 
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
-    st.write(data)
+    st.write(raw_data)
+
+### loading bar ###
 
 #'Starting to load data'	
 
@@ -47,8 +49,15 @@ if st.checkbox('Show raw data'):
 
 #'...and now we\'re done!'
 
+###
+
+raw_data.dropna()
+data = raw_data
+
+
 data['latitude'] = data['latitude'].dropna()
 data['longitude'] = data['longitude'].dropna()
+data['country_flying_mission'].dropna()
 
 #############################
 #sidebar
@@ -61,34 +70,25 @@ theater = st.sidebar.multiselect('theater', data['theater'].unique())
 start_date = st.sidebar.date_input('start date', datetime.date(1939,1,1))
 end_date = st.sidebar.date_input('end date', datetime.date(1949,1,1))
 
+nan_drop = data[data['country_flying_mission'] == ' '].index
+data.drop(nan_drop, inplace=True)
 
-###
 
-#mask = (data['msndate'] > '1939-1-1') & (data['msndate'] <= '1949-1-1')
-#st.write(data.loc[mask])
+data['country_flying_mission']
 
 ##########
 
 # Filter dataframe
 
-data['latitude'] = data['latitude'].dropna()
-data['longitude'] = data['longitude'].dropna()
 
 new_df = data[(data['country_flying_mission'].isin(Airforce)) & (data['theater'].isin(theater))]
 
 
 
-# write dataframe to screen
-#st.write(new_df)
-
-
-
-
-
-
 #####################
-st.map(new_df)
+# Map
 
+st.map(new_df)
 
 
 
@@ -98,5 +98,3 @@ start_color, end_color = st.select_slider(
     options=['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'],
     value=('red', 'blue'))
 st.write('You selected wavelengths between', start_color, 'and', end_color)
-
-
