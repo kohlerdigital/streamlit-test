@@ -25,7 +25,7 @@ def load_data(nrows):
 # Create a text element and let the reader know the data is loading.
 data_load_state = st.text('Loading data... It might take 45 secondes')
 # Load 10,000 rows of data into the dataframe.
-raw_data = load_data(1000)
+raw_data = load_data(10000)
 # Notify the reader that the data was successfully loaded.
 data_load_state.text("Data fully loaded! (using st.cache)")
 
